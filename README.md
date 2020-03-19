@@ -1,7 +1,7 @@
 # Corona Live Update
 ---
 
-Corona Api Json Live Curl From `https://www.worldometers.info/coronavirus/`
+Corona Api Json Live Curl From [https://www.worldometers.info/coronavirus](https://www.worldometers.info/coronavirus)
 
 Visit [https://corona-live-api.herokuapp.com/](https://corona-live-api.herokuapp.com)
 
