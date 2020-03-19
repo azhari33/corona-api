@@ -3,6 +3,8 @@ from bs4 import BeautifulSoup
 from cachetools import TTLCache
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
+from starlette.responses import JSONResponse
+from http import HTTPStatus
 
 app = FastAPI()
 app.add_middleware(
@@ -40,16 +42,16 @@ def parse_data(raw_data: str) -> list:
 @app.get("/")
 def request_data():
     _raw_data = get_data('main_table_countries_today')
-    return parse_data(_raw_data)
+    return JSONResponse({'status': HTTPStatus.OK, 'data': parse_data(_raw_data)}, status_code=HTTPStatus.OK)
 
 
 @app.get("/now")
 def current_data():
     _raw_data = get_data('main_table_countries_today')
-    return parse_data(_raw_data)
+    return JSONResponse({'status': HTTPStatus.OK, 'data': parse_data(_raw_data)}, status_code=HTTPStatus.OK)
 
 
 @app.get("/yesterday")
 def yesterday_data():
     _raw_data = get_data('main_table_countries_yesterday')
-    return parse_data(_raw_data)
+    return JSONResponse({'status': HTTPStatus.OK, 'data': parse_data(_raw_data)}, status_code=HTTPStatus.OK)
