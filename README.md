@@ -5,7 +5,9 @@ Corona Api Json Live Curl From [https://www.worldometers.info/coronavirus](https
 
 Visit [https://corona-live-api.herokuapp.com/](https://corona-live-api.herokuapp.com)
 
-* `https://corona-live-api.herokuapp.com/` to get current live information
-* `https://corona-live-api.herokuapp.com/now` to get current live information
-* `https://corona-live-api.herokuapp.com/yesterday` to get yesterday live information
+----
+## Documentation swagger
+For documentation please open 
+* [https://corona-live-api.herokuapp.com/docs](https://corona-live-api.herokuapp.com/docs)
+* [https://corona-live-api.herokuapp.com/redoc](https://corona-live-api.herokuapp.com/redoc)
 
