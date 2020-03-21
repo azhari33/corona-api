@@ -64,3 +64,15 @@ def yesterday_data():
         'status': HTTPStatus.OK,
         'data': _data.fetch_yesterday_data()},
         status_code=HTTPStatus.OK)
+
+
+@app.get("/history")
+def history_data(date: str = None, country: str = None):
+    """Get all history data
+    :return: dict
+    """
+    _data = Api()
+    return JSONResponse({
+        'status': HTTPStatus.OK,
+        'data': _data.fetch_history_data(date, country)},
+        status_code=HTTPStatus.OK)
