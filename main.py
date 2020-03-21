@@ -1,6 +1,5 @@
 from http import HTTPStatus
 
-from bs4 import BeautifulSoup
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 from starlette.responses import JSONResponse

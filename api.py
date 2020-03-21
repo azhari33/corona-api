@@ -1,9 +1,9 @@
 import json
-import pandas as pd
-import requests
 import ssl
 from functools import wraps
 
+import pandas as pd
+import requests
 from bs4 import BeautifulSoup
 from cachetools import TTLCache
 from fake_useragent import FakeUserAgent
@@ -45,7 +45,7 @@ class Helper:
         """
         return dict(
             zip(
-                ('Cases', 'Dead', 'Recoverd'), tuple(
+                ('Cases', 'Dead', 'Recovered'), tuple(
                     doc.find('span').get_text().strip()
                     for doc in raw_data.find_all('div', id='maincounter-wrap')
                 )
