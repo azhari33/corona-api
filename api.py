@@ -11,7 +11,7 @@ from fake_useragent import FakeUserAgent
 # unblocking checking certs https
 ssl._create_default_https_context = ssl._create_unverified_context
 
-cache = TTLCache(maxsize=10_000, ttl=360)
+cache = TTLCache(maxsize=10_000, ttl=600)
 
 
 def cache_api(f):
