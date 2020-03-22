@@ -1,7 +1,7 @@
 import json
 import ssl
 from functools import wraps
-
+import concurrent.futures
 import pandas as pd
 import requests
 from bs4 import BeautifulSoup
@@ -28,14 +28,21 @@ class Helper:
 
     @staticmethod
     def parse_data_by_country(raw_data: BeautifulSoup, table_data: str) -> tuple:
-        _table_head = tuple(
-            head.get_text().encode("ascii", 'ignore').decode('utf-8').replace(',', '')
-            for head in raw_data.find('table', id=table_data).find('thead').find_all("th")
-        )
-        return tuple(
-            dict(zip(_table_head, [doc.get_text().strip() for doc in td.find_all("td")]))
-            for td in raw_data.find('tbody').find_all("tr")
-        )
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            _table_head = tuple(
+                executor.map(
+                    lambda x: x.get_text().encode("ascii", 'ignore').decode('utf-8').replace(',', ''),
+                    raw_data.find('table', id=table_data).find('thead').find_all("th")
+                )
+            )
+            return tuple(
+                map(
+                    lambda x: dict(zip(_table_head, tuple(
+                        executor.map(lambda y: y.get_text().strip(), x.find_all("td"))
+                    ))),
+                    raw_data.find('tbody').find_all("tr")
+                )
+            )
 
     @staticmethod
     def parse_data_summary(raw_data: BeautifulSoup) -> dict:
@@ -43,14 +50,16 @@ class Helper:
         :param raw_data:
         :return:
         """
-        return dict(
-            zip(
-                ('Cases', 'Dead', 'Recovered'), tuple(
-                    doc.find('span').get_text().strip()
-                    for doc in raw_data.find_all('div', id='maincounter-wrap')
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            return dict(
+                zip(
+                    ('Cases', 'Dead', 'Recovered'), tuple(
+                        executor.map(
+                            lambda x: x.find('span').get_text().strip(), raw_data.find_all('div', id='maincounter-wrap')
+                        )
+                    )
                 )
             )
-        )
 
 
 class Api(Helper):
@@ -74,14 +83,17 @@ class Api(Helper):
         """Fetch summary data
         :return: tuple
         """
-        return dict(
-            zip(
-                ('Cases', 'Dead', 'Recover'), tuple(
-                    doc.find('span').get_text().strip()
-                    for doc in self._fetch_data().find_all('div', id='maincounter-wrap')
+        with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+            return dict(
+                zip(
+                    ('Cases', 'Dead', 'Recover'), tuple(
+                        executor.map(
+                            lambda x: x.find('span').get_text().strip(),
+                            self._fetch_data().find_all('div', id='maincounter-wrap')
+                        )
+                    )
                 )
             )
-        )
 
     def fetch_current_data(self) -> tuple:
         """Fetch current latest data
