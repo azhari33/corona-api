@@ -1,4 +1,4 @@
-import json
+import orjson
 import ssl
 from functools import wraps
 import concurrent.futures
@@ -11,7 +11,7 @@ from fake_useragent import FakeUserAgent
 # unblocking checking certs https
 ssl._create_default_https_context = ssl._create_unverified_context
 
-cache = TTLCache(maxsize=10_000, ttl=600)
+cache = TTLCache(maxsize=100_000, ttl=600)
 
 
 def cache_api(f):
@@ -118,4 +118,4 @@ class Api(Helper):
             df = df[df['date'] == date]
         if country is not None:
             df = df[df['location'] == country]
-        return json.loads(df.to_json(orient='records'))
+        return orjson.loads(df.to_json(orient='records'))
