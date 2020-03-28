@@ -31,14 +31,15 @@ class Helper:
         with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
             _table_head = tuple(
                 executor.map(
-                    lambda x: x.get_text().encode("ascii", 'ignore').decode('utf-8').replace(',', ''),
+                    lambda x: x.text.encode("ascii", 'ignore') \
+                        .decode('utf-8').replace(',', '').replace(' ', '').replace('/', ''),
                     raw_data.find('table', id=table_data).find('thead').find_all("th")
                 )
             )
             return tuple(
                 map(
                     lambda x: dict(zip(_table_head, tuple(
-                        executor.map(lambda y: y.get_text().strip(), x.find_all("td"))
+                        executor.map(lambda y: y.text.strip(), x.find_all("td"))
                     ))),
                     raw_data.find('tbody').find_all("tr")
                 )
@@ -55,7 +56,7 @@ class Helper:
                 zip(
                     ('Cases', 'Dead', 'Recovered'), tuple(
                         executor.map(
-                            lambda x: x.find('span').get_text().strip(), raw_data.find_all('div', id='maincounter-wrap')
+                            lambda x: x.find('span').text.strip(), raw_data.find_all('div', id='maincounter-wrap')
                         )
                     )
                 )
@@ -88,7 +89,7 @@ class Api(Helper):
                 zip(
                     ('Cases', 'Dead', 'Recover'), tuple(
                         executor.map(
-                            lambda x: x.find('span').get_text().strip(),
+                            lambda x: x.find('span').text.strip(),
                             self._fetch_data().find_all('div', id='maincounter-wrap')
                         )
                     )
@@ -119,3 +120,6 @@ class Api(Helper):
         if country is not None:
             df = df[df['location'] == country]
         return orjson.loads(df.to_json(orient='records'))
+
+# For development purpose
+# uvicorn main:app --reload
