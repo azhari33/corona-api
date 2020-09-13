@@ -1,3 +1,10 @@
+"""
+The main module of the project.
+Corona Api Json Live Curl From https://www.worldometers.info/coronavirus
+Corona Api Json History From this dataset https://ourworldindata.org/coronavirus-source-data
+Full dataset https://covid.ourworldindata.org/data/ecdc/full_data.csv
+Visit https://corona-live-api.herokuapp.com
+"""
 from http import HTTPStatus
 
 from fastapi import FastAPI
