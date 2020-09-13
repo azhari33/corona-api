@@ -1,3 +1,8 @@
+"""
+api.py :
+    Api and Helper classes are here to get data from API.
+"""
+
 import orjson
 import ssl
 from functools import wraps
